@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Navbar } from './components';
-import { Home, Login, Register } from './pages';
+import { Navbar, RequireAuth } from './components';
+import { Home, Login, Register, Profile } from './pages';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { createTheme } from '@material-ui/core/styles';
@@ -27,6 +27,15 @@ const theme = createTheme({
       default: 'white',
     },
   },
+  overrides: {
+    MuiListItem: {
+      root: {
+        '&$selected': {
+          backgroundColor: 'black',
+        },
+      },
+    },
+  },
 });
 
 function App() {
@@ -40,6 +49,10 @@ function App() {
             <Route exact path='/' element={<Home />} />
             <Route exact path='/login' element={<Login />} />
             <Route exact path='/register' element={<Register />} />
+
+            <Route element={<RequireAuth />}>
+              <Route exact path='/profile' element={<Profile />} />
+            </Route>
           </Routes>
         </div>
       </Router>

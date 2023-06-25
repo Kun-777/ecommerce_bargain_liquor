@@ -10,29 +10,40 @@ import {
   Typography,
   Container,
 } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
-import axios from 'axios';
+import axios from '../../api/axios';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Register = () => {
   const classes = useStyles();
-  const [name, setName] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
+  const [firstname, setFirstName] = useState('');
+  const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Process registration logic here
-    const token = await axios
-      .post(`http://localhost:8000/register`, {
-        username: name,
+    await axios
+      .post('/register', {
+        firstname: firstname,
+        lastname: lastname,
         email: email,
+        phone: phone,
         password: password,
       })
+      .then((response) => {
+        localStorage.setItem('auth_token', response.data.access_token);
+        navigate(from);
+      })
       .catch((error) => {
-        alert(error);
+        alert(error.response.data.detail);
       });
-    console.log(token);
   };
 
   return (
@@ -47,14 +58,24 @@ const Register = () => {
         </Box>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 variant='outlined'
                 required
                 fullWidth
-                label='Username'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                label='First Name'
+                value={firstname}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                label='Last Name'
+                value={lastname}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -65,6 +86,16 @@ const Register = () => {
                 label='Email Address'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                label='Phone Number'
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -101,7 +132,7 @@ const Register = () => {
         <Typography variant='body2' color='textSecondary' align='center'>
           {'© '}
           {new Date().getFullYear()}
-          {' Company Name'}
+          {' Bargain Liquor'}
         </Typography>
       </Box>
     </Container>

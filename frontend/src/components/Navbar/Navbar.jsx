@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -8,15 +8,16 @@ import {
   Menu,
   Typography,
 } from '@material-ui/core';
-import { ShoppingCart } from '@material-ui/icons';
+import { ShoppingCart, AccountCircle } from '@material-ui/icons';
 import Button from '@mui/material/Button';
 import { Link, useLocation } from 'react-router-dom';
+import useAuth from '../../utils/useAuth';
 import useStyles from './styles';
 
 const Navbar = ({ totalItems }) => {
+  const { auth } = useAuth();
   const classes = useStyles();
   const location = useLocation();
-
   return (
     <>
       <AppBar position='fixed' className={classes.appBar} color='inherit'>
@@ -32,23 +33,42 @@ const Navbar = ({ totalItems }) => {
           <div className={classes.grow} />
           {location.pathname === '/' && (
             <>
-              <div className={classes.login}>
-                <Button
-                  variant='outlined'
-                  href='/login'
-                  sx={{
-                    color: 'white',
-                    backgroundColor: 'black',
-                    borderColor: 'white',
-                  }}
-                >
-                  Sign in
-                </Button>
-              </div>
+              {!auth.access_token && (
+                <div className={classes.login}>
+                  <Button
+                    variant='outlined'
+                    href='/login'
+                    state={{ from: location }}
+                    sx={{
+                      color: 'white',
+                      backgroundColor: 'black',
+                      borderColor: 'white',
+                    }}
+                  >
+                    Sign in
+                  </Button>
+                </div>
+              )}
+              {auth.access_token && (
+                <div className={classes.button}>
+                  <IconButton
+                    component={Link}
+                    to='/profile'
+                    state={{ from: location }}
+                    aria-label='User Profile'
+                    color='inherit'
+                  >
+                    <Badge badgeContent={totalItems} color='secondary'>
+                      <AccountCircle style={{ color: '#FFFFFF' }} />
+                    </Badge>
+                  </IconButton>
+                </div>
+              )}
               <div className={classes.button}>
                 <IconButton
                   component={Link}
                   to='/cart'
+                  state={{ from: location }}
                   aria-label='Show cart items'
                   color='inherit'
                 >

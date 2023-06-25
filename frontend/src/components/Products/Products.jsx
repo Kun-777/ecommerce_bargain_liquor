@@ -4,7 +4,7 @@ import Product from '../Product/Product';
 import { priceRanges } from '../Pricefilter/Pricefilter';
 import useStyles from './styles';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../api/axios';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -30,12 +30,9 @@ const Products = () => {
   useEffect(() => {
     // Initial fetch from database
     const fetchProducts = async () => {
-      const data = await axios
-        .get(`http://localhost:8000/products/`)
-        .then(function (response) {
-          return response.data;
-        });
-      setProducts(data);
+      await axios.get('/products').then((response) => {
+        setProducts(response.data);
+      });
     };
     fetchProducts();
   }, []);

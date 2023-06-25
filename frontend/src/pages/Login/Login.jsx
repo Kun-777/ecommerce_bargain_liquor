@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -12,18 +11,36 @@ import {
   Typography,
   Container,
 } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './styles';
+import { axiosPrivate } from '../../api/axios';
+import { useNavigate, useLocation } from 'react-router-dom';
+import useAuth from '../../utils/useAuth';
 
 const Login = () => {
+  const { setAuth } = useAuth();
   const classes = useStyles();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+    await axiosPrivate
+      .post('/login', {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        const access_token = response.data.access_token;
+        setAuth({ access_token: access_token });
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        alert(error.response.data.detail);
+      });
   };
 
   return (
