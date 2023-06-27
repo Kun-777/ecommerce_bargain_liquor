@@ -29,9 +29,12 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import useStyles from './styles';
 import { useNavigate } from 'react-router-dom';
-import { refreshToken } from '../../utils/refreshToken';
+import useAuth from '../../hooks/useAuth';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const Profile = () => {
+  const axiosPrivate = useAxiosPrivate();
+  const { setAuth } = useAuth();
   const classes = useStyles();
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -45,9 +48,18 @@ const Profile = () => {
     }
   };
 
-  const handleLogOut = () => {
-    localStorage.removeItem('auth_token');
-    navigate('/');
+  const handleLogOut = async () => {
+    const controller = new AbortController();
+    try {
+      await axiosPrivate.delete('/logout', {
+        signal: controller.signal,
+      });
+      controller.abort();
+      setAuth({ access_token: null });
+      navigate('/');
+    } catch (error) {
+      alert(error.response.data.detail);
+    }
   };
 
   return (
@@ -89,9 +101,6 @@ const Profile = () => {
             {selectedTab === 0 && (
               <>
                 <Typography>Content for Edit Information Tab</Typography>
-                <Button onClick={async () => await refreshToken()}>
-                  Refresh{' '}
-                </Button>
               </>
             )}
             {selectedTab === 1 && (

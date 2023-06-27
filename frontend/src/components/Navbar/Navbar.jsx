@@ -11,7 +11,7 @@ import {
 import { ShoppingCart, AccountCircle } from '@material-ui/icons';
 import Button from '@mui/material/Button';
 import { Link, useLocation } from 'react-router-dom';
-import useAuth from '../../utils/useAuth';
+import useAuth from '../../hooks/useAuth';
 import useStyles from './styles';
 
 const Navbar = ({ totalItems }) => {

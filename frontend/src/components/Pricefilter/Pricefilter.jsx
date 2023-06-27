@@ -6,8 +6,8 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Checkbox from '@mui/material/Checkbox';
 import useStyles from './styles';
-import { useSearchParamsState } from '../../utils/useSearchParamsState';
-import { handleSearchFilters } from '../../utils/handleSearchFilters';
+import useSearchParamsState from '../../hooks/useSearchParamsState';
+import handleSearchFilters from '../../utils/handleSearchFilters';
 
 export const priceRanges = {
   under10: (price) => price < 10,

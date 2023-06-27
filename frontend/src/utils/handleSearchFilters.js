@@ -1,4 +1,4 @@
-export const handleSearchFilters = (event, search, setSearch) => {
+const handleSearchFilters = (event, search, setSearch) => {
   if (event.target.checked) {
     if (search === null) {
       // nothing is checked
@@ -18,3 +18,5 @@ export const handleSearchFilters = (event, search, setSearch) => {
     }
   }
 };
+
+export default handleSearchFilters;

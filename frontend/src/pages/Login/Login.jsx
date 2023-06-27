@@ -14,7 +14,7 @@ import {
 import useStyles from './styles';
 import { axiosPrivate } from '../../api/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import useAuth from '../../utils/useAuth';
+import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
   const { setAuth } = useAuth();

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import useRefreshToken from './hooks/useRefreshToken';
+import useAuth from './hooks/useAuth';
 import { Navbar, RequireAuth } from './components';
 import { Home, Login, Register, Profile } from './pages';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -39,6 +40,21 @@ const theme = createTheme({
 });
 
 function App() {
+  const refresh = useRefreshToken();
+  const { auth } = useAuth();
+  useEffect(() => {
+    const verifyRefreshToken = async () => {
+      try {
+        await refresh();
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    if (!auth?.accessToken) {
+      verifyRefreshToken();
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
