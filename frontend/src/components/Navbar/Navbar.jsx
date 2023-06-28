@@ -4,12 +4,10 @@ import {
   Toolbar,
   IconButton,
   Badge,
-  MenuItem,
-  Menu,
   Typography,
 } from '@material-ui/core';
-import { ShoppingCart, AccountCircle } from '@material-ui/icons';
 import Button from '@mui/material/Button';
+import { ShoppingCart, AccountCircle } from '@material-ui/icons';
 import { Link, useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useStyles from './styles';
@@ -50,18 +48,20 @@ const Navbar = ({ totalItems }) => {
                 </div>
               )}
               {auth.access_token && (
-                <div className={classes.button}>
-                  <IconButton
+                <div className={classes.login}>
+                  <Button
                     component={Link}
                     to='/profile'
+                    variant='outlined'
                     state={{ from: location }}
-                    aria-label='User Profile'
-                    color='inherit'
+                    sx={{
+                      color: 'white',
+                      backgroundColor: 'black',
+                      borderColor: 'white',
+                    }}
                   >
-                    <Badge badgeContent={totalItems} color='secondary'>
-                      <AccountCircle style={{ color: '#FFFFFF' }} />
-                    </Badge>
-                  </IconButton>
+                    Hi, {auth.first_name}
+                  </Button>
                 </div>
               )}
               <div className={classes.button}>

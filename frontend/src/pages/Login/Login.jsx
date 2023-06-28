@@ -25,22 +25,47 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axiosPrivate
-      .post('/login', {
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        const access_token = response.data.access_token;
-        setAuth({ access_token: access_token });
-        navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        alert(error.response.data.detail);
-      });
+    if (remember) {
+      // get an access token that will expire soon and a refresh token
+      await axiosPrivate
+        .post('/login', {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          setAuth((prev) => ({
+            ...prev,
+            access_token: response.data.access_token,
+            first_name: response.data.first_name,
+          }));
+          navigate(from, { replace: true });
+        })
+        .catch((error) => {
+          alert(error.response.data.detail);
+        });
+    } else {
+      // get the access token only
+      await axiosPrivate
+        .post('/login_no_refresh', {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          setAuth((prev) => ({
+            ...prev,
+            access_token: response.data.access_token,
+            first_name: response.data.first_name,
+          }));
+          navigate(from, { replace: true });
+        })
+        .catch((error) => {
+          alert(error.response.data.detail);
+        });
+    }
   };
 
   return (
@@ -81,7 +106,15 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
+            control={
+              <Checkbox
+                value='remember'
+                color='primary'
+                onChange={(e) => {
+                  setRemember(e.target.checked);
+                }}
+              />
+            }
             label='Remember me'
           />
           <Button

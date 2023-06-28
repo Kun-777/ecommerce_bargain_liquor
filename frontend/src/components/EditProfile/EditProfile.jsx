@@ -1,43 +1,35 @@
 import React, { useState } from 'react';
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
-  Link,
   Grid,
   Box,
-  Typography,
   Container,
 } from '@material-ui/core';
 import useStyles from './styles';
-import axios from '../../api/axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-const Register = () => {
+const EditProfile = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
-
+  const axiosPrivate = useAxiosPrivate();
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Process registration logic here
-    await axios
-      .post('/register', {
+    await axiosPrivate
+      .post('/edit_profile', {
         first_name: firstname,
         last_name: lastname,
         email: email,
         phone: phone,
-        password: password,
       })
       .then((response) => {
         // add success alert
-        navigate('/login');
       })
       .catch((error) => {
         alert(error.response.data.detail);
@@ -45,14 +37,11 @@ const Register = () => {
   };
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <>
       <CssBaseline />
       <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar> */}
         <Box component='h1' variant='h5' sx={{ fontWeight: 'bold' }}>
-          Sign up
+          Edit Profile
         </Box>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -96,17 +85,6 @@ const Register = () => {
                 onChange={(e) => setPhone(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                label='Password'
-                type='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Grid>
           </Grid>
           <Button
             type='submit'
@@ -115,26 +93,12 @@ const Register = () => {
             color='primary'
             className={classes.submit}
           >
-            Sign Up
+            Save
           </Button>
-          <Grid container justify='flex-end'>
-            <Grid item>
-              <Link href='/login' variant='body2'>
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Typography variant='body2' color='textSecondary' align='center'>
-          {'© '}
-          {new Date().getFullYear()}
-          {' Bargain Liquor'}
-        </Typography>
-      </Box>
-    </Container>
+    </>
   );
 };
 
-export default Register;
+export default EditProfile;
