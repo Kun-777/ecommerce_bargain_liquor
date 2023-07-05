@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { EditProfile } from '../../components';
+import { EditProfile, ChangePassword } from '../../components';
 import useStyles from './styles';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
@@ -29,7 +29,7 @@ const Profile = () => {
 
   const handleLogOut = async () => {
     try {
-      await axiosPrivate.delete('/logout');
+      await axiosPrivate.delete('/user/logout');
       setAuth({ access_token: null, first_name: null });
       navigate('/');
     } catch (error) {
@@ -71,12 +71,10 @@ const Profile = () => {
             </List>
           </Paper>
         </Grid>
-        <Grid item>
+        <Grid item xs={7} sm={7} md={7} lg={7}>
           <div className={classes.content}>
             {selectedTab === 0 && <EditProfile />}
-            {selectedTab === 1 && (
-              <Typography>Content for Change Password Tab</Typography>
-            )}
+            {selectedTab === 1 && <ChangePassword />}
             {selectedTab === 2 && (
               <Typography>Content for Change Address Tab</Typography>
             )}

@@ -5,17 +5,35 @@ import {
   IconButton,
   Badge,
   Typography,
+  InputBase,
+  Paper,
 } from '@material-ui/core';
 import Button from '@mui/material/Button';
-import { ShoppingCart, AccountCircle } from '@material-ui/icons';
+import ShoppingCart from '@material-ui/icons/ShoppingCart';
+import SearchIcon from '@material-ui/icons/Search';
 import { Link, useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import useSearchParamsState from '../../hooks/useSearchParamsState';
+import useCart from '../../hooks/useCart';
 import useStyles from './styles';
 
 const Navbar = ({ totalItems }) => {
   const { auth } = useAuth();
   const classes = useStyles();
   const location = useLocation();
+  const [search, setSearch] = useSearchParamsState('text', null);
+  const [searchTemp, setSearchTemp] = useState('');
+  const { cart } = useCart();
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (searchTemp === '') {
+      setSearch(null);
+    } else {
+      setSearch(searchTemp.slice());
+    }
+  };
+
   return (
     <>
       <AppBar position='fixed' className={classes.appBar} color='inherit'>
@@ -28,6 +46,29 @@ const Navbar = ({ totalItems }) => {
           >
             Bargain Liquor
           </Typography>
+          {location.pathname === '/' && (
+            <Paper
+              component='form'
+              className={classes.searchBar}
+              onSubmit={handleSearch}
+            >
+              <InputBase
+                className={classes.searchInput}
+                placeholder='Search Your Drink'
+                inputProps={{ 'aria-label': 'search your drink' }}
+                onChange={(e) => {
+                  setSearchTemp(e.target.value);
+                }}
+              />
+              <IconButton
+                type='submit'
+                className={classes.searchIcon}
+                aria-label='search'
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+          )}
           <div className={classes.grow} />
           {location.pathname === '/' && (
             <>
@@ -72,7 +113,7 @@ const Navbar = ({ totalItems }) => {
                   aria-label='Show cart items'
                   color='inherit'
                 >
-                  <Badge badgeContent={totalItems} color='secondary'>
+                  <Badge badgeContent={cart.total_items} color='secondary'>
                     <ShoppingCart style={{ color: '#FFFFFF' }} />
                   </Badge>
                 </IconButton>

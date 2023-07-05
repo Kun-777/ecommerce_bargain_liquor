@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Avatar,
   Button,
   CssBaseline,
   TextField,
@@ -9,7 +8,10 @@ import {
   Box,
   Typography,
   Container,
+  Input,
 } from '@material-ui/core';
+import MaskedInput from 'react-text-mask';
+import PropTypes from 'prop-types';
 import useStyles from './styles';
 import axios from '../../api/axios';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -42,6 +44,12 @@ const Register = () => {
       .catch((error) => {
         alert(error.response.data.detail);
       });
+  };
+
+  const handlePhoneChange = (e) => {
+    if (e.target.value === '' || /^[0-9\b]{0,10}$/.test(e.target.value)) {
+      setPhone(e.target.value);
+    }
   };
 
   return (
@@ -93,7 +101,7 @@ const Register = () => {
                 fullWidth
                 label='Phone Number'
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
               />
             </Grid>
             <Grid item xs={12}>

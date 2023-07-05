@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   CssBaseline,
@@ -9,9 +9,11 @@ import {
 } from '@material-ui/core';
 import useStyles from './styles';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAuth from '../../hooks/useAuth';
 
 const EditProfile = () => {
   const classes = useStyles();
+  const { setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
@@ -22,7 +24,7 @@ const EditProfile = () => {
     e.preventDefault();
     // Process registration logic here
     await axiosPrivate
-      .post('/edit_profile', {
+      .post('/user/edit_profile', {
         first_name: firstname,
         last_name: lastname,
         email: email,
@@ -30,11 +32,39 @@ const EditProfile = () => {
       })
       .then((response) => {
         // add success alert
+        setAuth((prev) => ({
+          ...prev,
+          first_name: response.data.first_name,
+        }));
+        window.location.reload();
       })
       .catch((error) => {
         alert(error.response.data.detail);
       });
   };
+
+  const handlePhoneChange = (e) => {
+    if (e.target.value === '' || /^[0-9\b]{0,10}$/.test(e.target.value)) {
+      setPhone(e.target.value);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      await axiosPrivate
+        .get('/user/profile')
+        .then((response) => {
+          setFirstName(response.data.first_name);
+          setLastName(response.data.last_name);
+          setEmail(response.data.email);
+          setPhone(response.data.phone);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchUserInfo();
+  }, []);
 
   return (
     <>
@@ -82,7 +112,7 @@ const EditProfile = () => {
                 fullWidth
                 label='Phone Number'
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
               />
             </Grid>
           </Grid>

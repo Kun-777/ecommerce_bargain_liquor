@@ -5,5 +5,6 @@ export { default as RequireAuth } from './RequireAuth';
 export { default as VerifyEmail } from './VerifyEmail';
 export { default as EditProfile } from './EditProfile/EditProfile';
 export { default as PersistLogin } from './PersistLogin';
-// export { default as Cart } from './Cart/Cart';
+export { default as ChangePassword } from './ChangePassword/ChangePassword';
+export { default as CartItem } from './CartItem/CartItem';
 // export { default as Checkout } from './CheckoutForm/Checkout/Checkout';

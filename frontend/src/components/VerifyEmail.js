@@ -22,7 +22,7 @@ const VerifyEmail = () => {
 
     const verifyEmail = async () => {
       await axiosPrivate
-        .post('/verify_email')
+        .post('/user/verify_email')
         .then((response) => {
           setHtml({ __html: response.data });
         })

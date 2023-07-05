@@ -32,7 +32,7 @@ const Login = () => {
     if (remember) {
       // get an access token that will expire soon and a refresh token
       await axiosPrivate
-        .post('/login', {
+        .post('/user/login', {
           email: email,
           password: password,
         })
@@ -50,7 +50,7 @@ const Login = () => {
     } else {
       // get the access token only
       await axiosPrivate
-        .post('/login_no_refresh', {
+        .post('/user/login_no_refresh', {
           email: email,
           password: password,
         })
