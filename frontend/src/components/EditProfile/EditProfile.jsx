@@ -24,7 +24,7 @@ const EditProfile = () => {
     e.preventDefault();
     // Process registration logic here
     await axiosPrivate
-      .post('/user/edit_profile', {
+      .put('/user/edit_profile', {
         first_name: firstname,
         last_name: lastname,
         email: email,

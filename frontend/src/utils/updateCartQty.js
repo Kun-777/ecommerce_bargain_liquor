@@ -46,6 +46,10 @@ const updateCartQty = async (product, option, cart, setCart) => {
         ...prev,
         items: [].concat(
           prev.items.slice(0, item_index),
+          {
+            ...prev.items[item_index],
+            quantity: 0,
+          },
           prev.items.slice(item_index + 1)
         ),
         total_items: prev.total_items - 1,
@@ -56,6 +60,10 @@ const updateCartQty = async (product, option, cart, setCart) => {
       ...prev,
       items: [].concat(
         prev.items.slice(0, item_index),
+        {
+          ...prev.items[item_index],
+          quantity: 0,
+        },
         prev.items.slice(item_index + 1)
       ),
       total_items: prev.total_items - prev.items[item_index].quantity,

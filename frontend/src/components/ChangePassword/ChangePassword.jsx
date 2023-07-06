@@ -14,7 +14,7 @@ const ChangePassword = () => {
     e.preventDefault();
     // Process registration logic here
     await axiosPrivate
-      .post('/user/change_password', {
+      .put('/user/change_password', {
         old_password: oldpwd,
         new_password: newpwd,
       })
