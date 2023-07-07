@@ -7,24 +7,34 @@ const updateCartQty = async (product, option, cart, setCart) => {
   if (option === 1) {
     if (item_index !== -1) {
       // item already in cart
-      setCart((prev) => ({
-        ...prev,
-        items: [].concat(
-          prev.items.slice(0, item_index),
-          {
-            ...prev.items[item_index],
-            quantity: prev.items[item_index].quantity + 1,
-          },
-          prev.items.slice(item_index + 1)
-        ),
-        total_items: prev.total_items + 1,
-      }));
+      // quantity in cart must not be greater than inventory
+      if (cart.items[item_index].quantity < product.inventory) {
+        setCart((prev) => ({
+          ...prev,
+          items: [].concat(
+            prev.items.slice(0, item_index),
+            {
+              ...prev.items[item_index],
+              quantity: prev.items[item_index].quantity + 1,
+              synced: false,
+            },
+            prev.items.slice(item_index + 1)
+          ),
+          total_items: prev.total_items + 1,
+          total_price: prev.total_price + product.price,
+          modified: true,
+        }));
+      } else {
+        alert("Sorry :( that's all we have left.");
+      }
     } else {
       // new item
       setCart((prev) => ({
         ...prev,
-        items: [...prev.items, { ...product, quantity: 1 }],
+        items: [...prev.items, { ...product, quantity: 1, synced: false }],
         total_items: prev.total_items + 1,
+        total_price: prev.total_price + product.price,
+        modified: true,
       }));
     }
   } else if (option === -1) {
@@ -36,10 +46,13 @@ const updateCartQty = async (product, option, cart, setCart) => {
           {
             ...prev.items[item_index],
             quantity: prev.items[item_index].quantity - 1,
+            synced: false,
           },
           prev.items.slice(item_index + 1)
         ),
         total_items: prev.total_items - 1,
+        total_price: prev.total_price - product.price,
+        modified: true,
       }));
     } else {
       setCart((prev) => ({
@@ -49,10 +62,14 @@ const updateCartQty = async (product, option, cart, setCart) => {
           {
             ...prev.items[item_index],
             quantity: 0,
+            synced: false,
           },
           prev.items.slice(item_index + 1)
         ),
-        total_items: prev.total_items - 1,
+        total_items: prev.total_items - prev.items[item_index].quantity,
+        total_price:
+          prev.total_price - prev.items[item_index].quantity * product.price,
+        modified: true,
       }));
     }
   } else if (option === 0) {
@@ -63,10 +80,14 @@ const updateCartQty = async (product, option, cart, setCart) => {
         {
           ...prev.items[item_index],
           quantity: 0,
+          synced: false,
         },
         prev.items.slice(item_index + 1)
       ),
       total_items: prev.total_items - prev.items[item_index].quantity,
+      total_price:
+        prev.total_price - prev.items[item_index].quantity * product.price,
+      modified: true,
     }));
   }
 };

@@ -49,7 +49,7 @@ const CartItem = ({ item }) => {
           </IconButton>
         </div>
       </TableCell>
-      <TableCell>{classes.totalPrice}</TableCell>
+      <TableCell>${item.price * item.quantity}</TableCell>
       <TableCell>
         <IconButton onClick={() => updateCartQty(item, 0, cart, setCart)}>
           <Close />

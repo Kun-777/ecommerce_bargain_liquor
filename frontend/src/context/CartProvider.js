@@ -1,12 +1,14 @@
 import { createContext } from 'react';
-import useSyncWithLocalStorage from '../hooks/useSyncWithLocalStorage';
+import useCartSync from '../hooks/useCartSync';
 
 const CartContext = createContext({});
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useSyncWithLocalStorage('cart', {
+  const [cart, setCart] = useCartSync('cart', {
     items: [],
     total_items: 0,
+    total_price: 0,
+    modified: true,
   });
   return (
     <CartContext.Provider value={{ cart, setCart }}>

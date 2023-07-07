@@ -4,6 +4,7 @@ export default makeStyles(() => ({
   root: {
     maxWidth: '100%',
     borderColor: '#f0f0f0',
+    minHeight: '100%',
     // borderRadius: 0,
   },
   media: {
@@ -27,6 +28,12 @@ export default makeStyles(() => ({
     fontSize: '12px',
     fontWeight: '300',
     color: 'grey',
+  },
+  outofstock: {
+    fontSize: '15px',
+    fontWeight: '300',
+    color: 'red',
+    textAlign: 'right',
   },
   price: {
     marginTop: '0.8rem',

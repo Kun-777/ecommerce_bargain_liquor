@@ -36,6 +36,11 @@ const Product = ({ product }) => {
           <Typography variant='h6' className={classes.size}>
             {product.size}
           </Typography>
+          {!product.inventory && (
+            <Typography variant='h6' className={classes.outofstock}>
+              Out of stock
+            </Typography>
+          )}
         </div>
         <div className={classes.cardContent}>
           <Typography variant='h5' className={classes.price}>
@@ -48,14 +53,16 @@ const Product = ({ product }) => {
           color='textSecondary'
         /> */}
       </CardContent>
-      <CardActions disableSpacing className={classes.cardActions}>
-        <IconButton
-          aria-label='Add to Cart'
-          onClick={() => updateCartQty(product, 1, cart, setCart)}
-        >
-          <AddShoppingCart />
-        </IconButton>
-      </CardActions>
+      {product.inventory ? (
+        <CardActions disableSpacing className={classes.cardActions}>
+          <IconButton
+            aria-label='Add to Cart'
+            onClick={() => updateCartQty(product, 1, cart, setCart)}
+          >
+            <AddShoppingCart />
+          </IconButton>
+        </CardActions>
+      ) : null}
     </Card>
   );
 };

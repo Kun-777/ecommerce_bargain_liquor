@@ -42,9 +42,11 @@ const Cart = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {cart.items.map((item) => (
-              <CartItem item={item} />
-            ))}
+            {cart.items
+              .filter((item) => item.quantity > 0)
+              .map((item) => (
+                <CartItem item={item} />
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -64,17 +66,29 @@ const Cart = () => {
               </Grid>
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.big}>
-                  <span>$149.96</span>
+                  <span>${parseFloat(cart.total_price).toFixed(2)}</span>
                 </Box>
               </Grid>
               <Grid item xs={5}>
                 <Box align={'right'}>
-                  <b className={classes.big}>Shipping:</b>
+                  <b className={classes.big}>Tax:</b>
                 </Box>
               </Grid>
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.big}>
-                  <span>$0</span>
+                  <span>
+                    ${parseFloat(cart.total_price * 0.0825).toFixed(2)}
+                  </span>
+                </Box>
+              </Grid>
+              <Grid item xs={5}>
+                <Box align={'right'}>
+                  <b className={classes.big}>Delivery Fee:</b>
+                </Box>
+              </Grid>
+              <Grid item xs={7}>
+                <Box px={2} align={'right'} className={classes.big}>
+                  <span>$3</span>
                 </Box>
               </Grid>
             </Grid>
@@ -89,13 +103,20 @@ const Cart = () => {
               </Grid>
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.large}>
-                  <span>$149.96</span>
+                  <span>
+                    ${parseFloat(cart.total_price * 1.0825 + 3).toFixed(2)}
+                  </span>
                 </Box>
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} sm={5} md={4} container alignItems={'flex-end'}>
-            <Button className={classes.btn} startIcon={<KeyboardArrowLeft />}>
+            <Button
+              component={Link}
+              to='/'
+              className={classes.btn}
+              startIcon={<KeyboardArrowLeft />}
+            >
               Continue Shopping
             </Button>
           </Grid>
@@ -136,7 +157,7 @@ const Cart = () => {
       <Typography className={classes.heading} variant={'h1'} gutterBottom>
         Shopping Cart
       </Typography>
-      {!cart.items.length ? <EmptyCart /> : <FilledCart />}
+      {!cart.total_items ? <EmptyCart /> : <FilledCart />}
     </div>
   );
 };
