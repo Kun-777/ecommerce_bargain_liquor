@@ -7,6 +7,10 @@ import {
   Typography,
   InputBase,
   Paper,
+  Menu,
+  MenuItem,
+  ListItem,
+  ListItemText,
 } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
@@ -23,7 +27,23 @@ const Navbar = ({ totalItems }) => {
   const location = useLocation();
   const [search, setSearch] = useSearchParamsState('text', null);
   const [searchTemp, setSearchTemp] = useState('');
-  const { cart } = useCart();
+  const { cart, setCart } = useCart();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClickOptions = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (event, index) => {
+    index === 0
+      ? setCart((prev) => ({ ...prev, order_type: 'pick up' }))
+      : setCart((prev) => ({ ...prev, order_type: 'delivery' }));
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -72,6 +92,50 @@ const Navbar = ({ totalItems }) => {
           <div className={classes.grow} />
           {location.pathname === '/' && (
             <>
+              <div className={classes.login}>
+                <Button
+                  variant='outlined'
+                  sx={{
+                    display: 'block',
+                    textAlign: 'left',
+                    color: 'white',
+                    backgroundColor: 'black',
+                    borderColor: 'white',
+                    fontWeight: 'bold',
+                    maxWidth: 150,
+                  }}
+                  onClick={handleClickOptions}
+                >
+                  <Typography variant='h6' style={{ fontSize: 16 }}>
+                    {cart.order_type === 'pick up' ? 'Pick up' : 'Deliver to'}
+                  </Typography>
+                  <Typography noWrap variant='body2' style={{ fontSize: 10 }}>
+                    @ 13500 W Airport Blvd
+                  </Typography>
+                </Button>
+                <Menu
+                  getContentAnchorEl={null}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem
+                    // selected={selectedIndex === 0}
+                    onClick={(e) => handleMenuItemClick(e, 0)}
+                  >
+                    Pick up
+                  </MenuItem>
+                  <MenuItem
+                    // selected={selectedIndex === 1}
+                    onClick={(e) => handleMenuItemClick(e, 1)}
+                  >
+                    Delivery
+                  </MenuItem>
+                </Menu>
+              </div>
               {!auth.access_token && (
                 <div className={classes.login}>
                   <Button
@@ -82,6 +146,7 @@ const Navbar = ({ totalItems }) => {
                       color: 'white',
                       backgroundColor: 'black',
                       borderColor: 'white',
+                      fontWeight: 'bold',
                     }}
                   >
                     Sign in
@@ -99,6 +164,7 @@ const Navbar = ({ totalItems }) => {
                       color: 'white',
                       backgroundColor: 'black',
                       borderColor: 'white',
+                      fontWeight: 'bold',
                     }}
                   >
                     Hi, {auth.first_name}

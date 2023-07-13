@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useRefreshToken from './hooks/useRefreshToken';
 import useAuth from './hooks/useAuth';
 import { Navbar, RequireAuth, VerifyEmail, PersistLogin } from './components';
-import { Home, Login, Register, Profile, Cart } from './pages';
+import { Home, Login, Register, Profile, Cart, Checkout } from './pages';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 import { createTheme } from '@material-ui/core/styles';
@@ -52,6 +52,7 @@ function App() {
               <Route exact path='/login' element={<Login />} />
               <Route exact path='/register' element={<Register />} />
               <Route exact path='/cart' element={<Cart />} />
+              <Route exact path='/checkout' element={<Checkout />} />
 
               <Route element={<RequireAuth />}>
                 <Route exact path='/profile' element={<Profile />} />

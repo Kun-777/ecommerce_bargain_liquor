@@ -49,7 +49,9 @@ const CartItem = ({ item }) => {
           </IconButton>
         </div>
       </TableCell>
-      <TableCell>${item.price * item.quantity}</TableCell>
+      <TableCell>
+        ${parseFloat(item.price * item.quantity).toFixed(2)}
+      </TableCell>
       <TableCell>
         <IconButton onClick={() => updateCartQty(item, 0, cart, setCart)}>
           <Close />

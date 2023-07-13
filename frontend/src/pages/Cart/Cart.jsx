@@ -66,7 +66,7 @@ const Cart = () => {
               </Grid>
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.big}>
-                  <span>${parseFloat(cart.total_price).toFixed(2)}</span>
+                  <span>${parseFloat(cart.subtotal).toFixed(2)}</span>
                 </Box>
               </Grid>
               <Grid item xs={5}>
@@ -76,9 +76,7 @@ const Cart = () => {
               </Grid>
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.big}>
-                  <span>
-                    ${parseFloat(cart.total_price * 0.0825).toFixed(2)}
-                  </span>
+                  <span>${parseFloat(cart.subtotal * 0.0825).toFixed(2)}</span>
                 </Box>
               </Grid>
               <Grid item xs={5}>
@@ -104,7 +102,7 @@ const Cart = () => {
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.large}>
                   <span>
-                    ${parseFloat(cart.total_price * 1.0825 + 3).toFixed(2)}
+                    ${parseFloat(cart.subtotal * 1.0825 + 3).toFixed(2)}
                   </span>
                 </Box>
               </Grid>
@@ -130,7 +128,13 @@ const Cart = () => {
           variant='contained'
           color='secondary'
           onClick={() =>
-            setCart((prev) => ({ ...prev, items: [], total_items: 0 }))
+            setCart((prev) => ({
+              ...prev,
+              items: [],
+              total_items: 0,
+              subtotal: 0,
+              modified: true,
+            }))
           }
         >
           Empty Cart

@@ -52,8 +52,8 @@ const Products = () => {
             <Grid
               item
               key={product.id}
-              xs={4}
-              sm={4}
+              xs={6}
+              sm={6}
               md={4}
               lg={3}
               className={classes.product}

@@ -16,23 +16,23 @@ const useCartSync = (key, initialState) => {
     const updateCartDB = async () => {
       const response = await axiosPrivate
         .put('/cart', {
-          cart: state.items,
+          items: state.items,
           paramsSerializer: {
             indexes: null,
           },
         })
         .catch((err) => console.log(err));
       if (response.data) {
-        setState({
+        setState((prev) => ({
+          ...prev,
           items: response.data,
           total_items: state.total_items,
-          total_price: state.total_price,
+          subtotal: state.subtotal,
           modified: false,
-        });
+        }));
       }
     };
     if (auth.access_token) {
-      console.log(state);
       if (state.modified) {
         updateCartDB();
       }
@@ -50,16 +50,17 @@ const useCartSync = (key, initialState) => {
           .catch((err) => console.log(err));
         if (response.data) {
           let total_items = 0;
-          let total_price = 0;
+          let subtotal = 0;
           for (const item of response.data) {
             total_items += item.quantity;
-            total_price += item.quantity * item.price;
+            subtotal += item.quantity * item.price;
           }
           setState({
             items: response.data,
             total_items: total_items,
-            total_price: total_price,
+            subtotal: subtotal,
             modified: false,
+            order_type: 'pick up',
           });
         }
       }

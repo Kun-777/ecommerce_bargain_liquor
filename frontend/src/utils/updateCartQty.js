@@ -21,7 +21,7 @@ const updateCartQty = async (product, option, cart, setCart) => {
             prev.items.slice(item_index + 1)
           ),
           total_items: prev.total_items + 1,
-          total_price: prev.total_price + product.price,
+          subtotal: prev.subtotal + product.price,
           modified: true,
         }));
       } else {
@@ -33,7 +33,7 @@ const updateCartQty = async (product, option, cart, setCart) => {
         ...prev,
         items: [...prev.items, { ...product, quantity: 1, synced: false }],
         total_items: prev.total_items + 1,
-        total_price: prev.total_price + product.price,
+        subtotal: prev.subtotal + product.price,
         modified: true,
       }));
     }
@@ -51,7 +51,7 @@ const updateCartQty = async (product, option, cart, setCart) => {
           prev.items.slice(item_index + 1)
         ),
         total_items: prev.total_items - 1,
-        total_price: prev.total_price - product.price,
+        subtotal: prev.subtotal - product.price,
         modified: true,
       }));
     } else {
@@ -67,8 +67,8 @@ const updateCartQty = async (product, option, cart, setCart) => {
           prev.items.slice(item_index + 1)
         ),
         total_items: prev.total_items - prev.items[item_index].quantity,
-        total_price:
-          prev.total_price - prev.items[item_index].quantity * product.price,
+        subtotal:
+          prev.subtotal - prev.items[item_index].quantity * product.price,
         modified: true,
       }));
     }
@@ -85,8 +85,7 @@ const updateCartQty = async (product, option, cart, setCart) => {
         prev.items.slice(item_index + 1)
       ),
       total_items: prev.total_items - prev.items[item_index].quantity,
-      total_price:
-        prev.total_price - prev.items[item_index].quantity * product.price,
+      subtotal: prev.subtotal - prev.items[item_index].quantity * product.price,
       modified: true,
     }));
   }
