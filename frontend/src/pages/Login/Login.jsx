@@ -26,6 +26,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,11 +42,12 @@ const Login = () => {
             ...prev,
             access_token: response.data.access_token,
             first_name: response.data.first_name,
+            is_admin: response.data.is_admin,
           }));
           navigate(from, { replace: true });
         })
         .catch((error) => {
-          alert(error.response.data.detail);
+          setMessage(error.response.data.detail);
         });
     } else {
       // get the access token only
@@ -59,11 +61,12 @@ const Login = () => {
             ...prev,
             access_token: response.data.access_token,
             first_name: response.data.first_name,
+            is_admin: response.data.is_admin,
           }));
           navigate(from, { replace: true });
         })
         .catch((error) => {
-          alert(error.response.data.detail);
+          setMessage(error.response.data.detail);
         });
     }
   };
@@ -139,6 +142,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </form>
+        {message && <div className={classes.message}>{message}</div>}
       </div>
       <Box mt={8}>
         <Typography variant='body2' color='textSecondary' align='center'>

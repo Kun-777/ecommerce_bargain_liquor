@@ -5,40 +5,43 @@ import {
   Step,
   StepLabel,
   Typography,
-  CircularProgress,
-  Divider,
-  Button,
   CssBaseline,
+  Grid,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import useStyles from './styles';
 import AddressForm from '../AddressForm';
 import PaymentForm from '../PaymentForm';
 import useCart from '../../../hooks/useCart';
+import useAuth from '../../../hooks/useAuth';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
+import Review from '../Review';
+import { TipProvider } from '../../../context/TipProvider';
 
 const steps = ['Customer information', 'Payment details'];
 
 const Checkout = () => {
+  const { auth } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
   const { cart } = useCart();
   const [order, setOrder] = useState({});
-  const classes = useStyles();
+  const [userInfo, setUserInfo] = useState({});
   const axiosPrivate = useAxiosPrivate();
+  const classes = useStyles();
 
   useEffect(() => {
-    // const createOrder = async () => {
-    //   await axiosPrivate
-    //     .post('/order/create', {
-    //       items: cart.items,
-    //       order_type: cart.order_type,
-    //       paramsSerializer: {
-    //         indexes: null,
-    //       },
-    //     })
-    //     .then((response) => setOrder({ order_id: response?.data.order_id }))
-    //     .catch((e) => console.log(e));
-    // };
+    const fetchUserInfo = async () => {
+      await axiosPrivate
+        .get('/user/profile')
+        .then((response) => {
+          setUserInfo(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    if (auth.access_token) {
+      fetchUserInfo();
+    }
     if (cart.total_items && cart.order_type) {
       setOrder((prev) => ({
         ...prev,
@@ -46,7 +49,7 @@ const Checkout = () => {
         order_type: cart.order_type,
       }));
     }
-  }, [cart]);
+  }, [cart, auth, axiosPrivate]);
 
   const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
   const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -56,61 +59,63 @@ const Checkout = () => {
     nextStep();
   };
 
-  let Confirmation = () =>
-    order.customer_reference ? (
-      <>
-        <div>
-          <Typography variant='h5'>
-            Thank you for your purchase, {order.first_name} {order.last_name}
-          </Typography>
-          <Divider className={classes.divider} />
-          <Typography variant='subtitle2'>
-            Order ref: {order.customer_reference}
-          </Typography>
-        </div>
-        <br />
-        <Button component={Link} to='/' variant='outlined' type='button'>
-          Back to Home
-        </Button>
-      </>
-    ) : (
-      <div className={classes.spinner}>
-        <CircularProgress />
-      </div>
-    );
-
   const Form = () =>
     activeStep === 0 ? (
-      <AddressForm next={next} order_type={order.order_type} />
-    ) : (
-      <PaymentForm
-        order={order}
-        setOrder={setOrder}
-        nextStep={nextStep}
-        backStep={backStep}
+      <AddressForm
+        next={next}
+        order_type={order.order_type}
+        userInfo={userInfo}
       />
+    ) : (
+      <PaymentForm order={order} backStep={backStep} />
     );
 
   return (
-    <>
+    <TipProvider>
       <CssBaseline />
       <div className={classes.toolbar} />
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
-          <Typography variant='h4' align='center'>
-            Checkout
-          </Typography>
-          <Stepper activeStep={activeStep} className={classes.stepper}>
-            {steps.map((step) => (
-              <Step key={step}>
-                <StepLabel>{step}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === steps.length ? <Confirmation /> : <Form />}
-        </Paper>
-      </main>
-    </>
+      {activeStep === 0 ? (
+        <Grid container spacing={5} className={classes.layout}>
+          <Grid item xs={6}>
+            <Paper className={classes.paper}>
+              <Typography variant='h4' align='center'>
+                Checkout
+              </Typography>
+              <Stepper activeStep={activeStep} className={classes.stepper}>
+                {steps.map((step) => (
+                  <Step key={step}>
+                    <StepLabel>{step}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              <Form />
+            </Paper>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={5}>
+            <Paper className={classes.paper}>
+              {order.items && <Review order={order} />}
+            </Paper>
+          </Grid>
+        </Grid>
+      ) : (
+        <main className={classes.payment}>
+          <Paper className={classes.paper}>
+            <Typography variant='h4' align='center'>
+              Checkout
+            </Typography>
+            <Stepper activeStep={activeStep} className={classes.stepper}>
+              {steps.map((step) => (
+                <Step key={step}>
+                  <StepLabel>{step}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <Form />
+          </Paper>
+        </main>
+      )}
+    </TipProvider>
   );
 };
 

@@ -2,33 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Button, CssBaseline, TextField, Grid, Box } from '@material-ui/core';
 import useStyles from './styles';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import useAuth from '../../hooks/useAuth';
 
-const EditProfile = () => {
+const ChangeAddress = () => {
   const classes = useStyles();
-  const { setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [message, setMessage] = useState(null);
-  const [firstname, setFirstName] = useState('');
-  const [lastname, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [addressLine1, setAddressLine1] = useState('');
+  const [addressLine2, setAddressLine2] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipCode, setZipCode] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Process registration logic here
     await axiosPrivate
-      .put('/user/edit_profile', {
-        first_name: firstname,
-        last_name: lastname,
-        email: email,
-        phone: phone,
+      .put('/user/change_address', {
+        address_line_1: addressLine1,
+        address_line_2: addressLine2,
+        city: city,
+        state: state,
+        zip_code: zipCode,
       })
       .then((response) => {
-        setAuth((prev) => ({
-          ...prev,
-          first_name: response.data.first_name,
-        }));
         setMessage(response.data.msg);
       })
       .catch((error) => {
@@ -36,21 +32,16 @@ const EditProfile = () => {
       });
   };
 
-  const handlePhoneChange = (e) => {
-    if (e.target.value === '' || /^[0-9\b]{0,10}$/.test(e.target.value)) {
-      setPhone(e.target.value);
-    }
-  };
-
   useEffect(() => {
     const fetchUserInfo = async () => {
       await axiosPrivate
         .get('/user/profile')
         .then((response) => {
-          setFirstName(response.data.first_name);
-          setLastName(response.data.last_name);
-          setEmail(response.data.email);
-          setPhone(response.data.phone);
+          setAddressLine1(response.data.address_line_1);
+          setAddressLine2(response.data.address_line_2);
+          setCity(response.data.city);
+          setState(response.data.state);
+          setZipCode(response.data.zip_code);
         })
         .catch((error) => {
           console.log(error);
@@ -64,48 +55,57 @@ const EditProfile = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Box component='h1' variant='h5' sx={{ fontWeight: 'bold' }}>
-          Edit Profile
+          Change Address
         </Box>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                label='First Name'
-                value={firstname}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant='outlined'
-                required
-                fullWidth
-                label='Last Name'
-                value={lastname}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant='outlined'
                 required
                 fullWidth
-                label='Email Address'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                label='Address Line 1'
+                value={addressLine1}
+                onChange={(e) => setAddressLine1(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 variant='outlined'
+                fullWidth
+                label='Address Line 2'
+                value={addressLine2}
+                onChange={(e) => setAddressLine2(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant='outlined'
                 required
                 fullWidth
-                label='Phone Number'
-                value={phone}
-                onChange={handlePhoneChange}
+                label='City'
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                label='State'
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                label='Zip Code'
+                value={zipCode}
+                onChange={(e) => setZipCode(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -125,4 +125,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default ChangeAddress;

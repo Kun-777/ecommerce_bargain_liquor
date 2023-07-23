@@ -8,29 +8,27 @@ import {
   Box,
   Typography,
   Container,
-  Input,
 } from '@material-ui/core';
-import MaskedInput from 'react-text-mask';
-import PropTypes from 'prop-types';
 import useStyles from './styles';
 import axios from '../../api/axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-
+  const [message, setMessage] = useState(null);
   const [firstname, setFirstName] = useState('');
   const [lastname, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmpwd, setConfirmpwd] = useState('');
   const [phone, setPhone] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Process registration logic here
     await axios
-      .post('/register', {
+      .post('/user/register', {
         first_name: firstname,
         last_name: lastname,
         email: email,
@@ -38,11 +36,11 @@ const Register = () => {
         password: password,
       })
       .then((response) => {
-        // add success alert
+        setMessage(response.data.msg);
         navigate('/login');
       })
       .catch((error) => {
-        alert(error.response.data.detail);
+        setMessage(error.response.data.detail);
       });
   };
 
@@ -115,6 +113,22 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                label='Confirm Password'
+                type='password'
+                value={confirmpwd}
+                error={password !== confirmpwd}
+                helperText={
+                  password !== confirmpwd &&
+                  'New password and confirm password do not match'
+                }
+                onChange={(e) => setConfirmpwd(e.target.value)}
+              />
+            </Grid>
           </Grid>
           <Button
             type='submit'
@@ -133,6 +147,7 @@ const Register = () => {
             </Grid>
           </Grid>
         </form>
+        {message && <div className={classes.message}>{message}</div>}
       </div>
       <Box mt={5}>
         <Typography variant='body2' color='textSecondary' align='center'>

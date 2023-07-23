@@ -53,7 +53,7 @@ const Product = ({ product }) => {
           color='textSecondary'
         /> */}
       </CardContent>
-      {product.inventory ? (
+      {product.inventory > 0 ? (
         <CardActions disableSpacing className={classes.cardActions}>
           <IconButton
             aria-label='Add to Cart'

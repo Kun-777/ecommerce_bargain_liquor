@@ -7,4 +7,6 @@ export { default as EditProfile } from './EditProfile/EditProfile';
 export { default as PersistLogin } from './PersistLogin';
 export { default as ChangePassword } from './ChangePassword/ChangePassword';
 export { default as CartItem } from './CartItem/CartItem';
-// export { default as Checkout } from './CheckoutForm/Checkout/Checkout';
+export { default as ChangeAddress } from './ChangeAddress/ChangeAddress';
+export { default as DateTimePicker } from './DateTimePicker';
+export { default as TipSelection } from './TipSelection';

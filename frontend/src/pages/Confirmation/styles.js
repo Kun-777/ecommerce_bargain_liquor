@@ -1,20 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
-  appBar: {
-    position: 'relative',
-  },
-  toolbar: theme.mixins.toolbar,
-  layout: {
-    marginTop: '5%',
-    width: 'auto',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up(1200 + theme.spacing(2) * 2)]: {
-      width: 1200,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+  root: {
+    display: 'flex',
+    width: '100%',
   },
   paper: {
     marginTop: theme.spacing(3),
@@ -40,8 +29,5 @@ export default makeStyles((theme) => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
   },
 }));

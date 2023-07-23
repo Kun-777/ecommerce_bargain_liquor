@@ -6,6 +6,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 const ChangePassword = () => {
   const classes = useStyles();
   const axiosPrivate = useAxiosPrivate();
+  const [message, setMessage] = useState(null);
   const [oldpwd, setOldpwd] = useState('');
   const [newpwd, setNewpwd] = useState('');
   const [confirmpwd, setConfirmpwd] = useState('');
@@ -19,10 +20,10 @@ const ChangePassword = () => {
         new_password: newpwd,
       })
       .then((response) => {
-        alert(response.data.msg);
+        setMessage(response.data.msg);
       })
       .catch((error) => {
-        alert(error.response.data.detail);
+        setMessage(error.response.data.detail);
       });
   };
 
@@ -81,6 +82,7 @@ const ChangePassword = () => {
             Save
           </Button>
         </form>
+        {message && <div className={classes.message}>{message}</div>}
       </div>
     </>
   );

@@ -16,6 +16,9 @@ import useStyles from './styles';
 import { CartItem } from '../../components';
 import useCart from '../../hooks/useCart';
 
+const DELIVERY_FEE = parseFloat(process.env.REACT_APP_DELIVERY_FEE);
+const TAX_RATE = parseFloat(process.env.REACT_APP_TAX_RATE);
+
 const Cart = () => {
   const classes = useStyles();
   const { cart, setCart } = useCart();
@@ -69,6 +72,20 @@ const Cart = () => {
                   <span>${parseFloat(cart.subtotal).toFixed(2)}</span>
                 </Box>
               </Grid>
+              {cart.order_type === 'delivery' && (
+                <>
+                  <Grid item xs={5}>
+                    <Box align={'right'}>
+                      <b className={classes.big}>Delivery Fee:</b>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <Box px={2} align={'right'} className={classes.big}>
+                      <span>${DELIVERY_FEE.toFixed(2)}</span>
+                    </Box>
+                  </Grid>
+                </>
+              )}
               <Grid item xs={5}>
                 <Box align={'right'}>
                   <b className={classes.big}>Tax:</b>
@@ -76,17 +93,12 @@ const Cart = () => {
               </Grid>
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.big}>
-                  <span>${parseFloat(cart.subtotal * 0.0825).toFixed(2)}</span>
-                </Box>
-              </Grid>
-              <Grid item xs={5}>
-                <Box align={'right'}>
-                  <b className={classes.big}>Delivery Fee:</b>
-                </Box>
-              </Grid>
-              <Grid item xs={7}>
-                <Box px={2} align={'right'} className={classes.big}>
-                  <span>$3</span>
+                  <span>
+                    $
+                    {cart.order_type === 'pick up'
+                      ? (cart.subtotal * TAX_RATE).toFixed(2)
+                      : ((cart.subtotal + DELIVERY_FEE) * TAX_RATE).toFixed(2)}
+                  </span>
                 </Box>
               </Grid>
             </Grid>
@@ -102,7 +114,12 @@ const Cart = () => {
               <Grid item xs={7}>
                 <Box px={2} align={'right'} className={classes.large}>
                   <span>
-                    ${parseFloat(cart.subtotal * 1.0825 + 3).toFixed(2)}
+                    $
+                    {parseFloat(
+                      cart.order_type === 'pick up'
+                        ? cart.subtotal * (1 + TAX_RATE)
+                        : (cart.subtotal + DELIVERY_FEE) * (1 + TAX_RATE)
+                    ).toFixed(2)}
                   </span>
                 </Box>
               </Grid>

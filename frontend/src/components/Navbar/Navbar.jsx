@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -9,8 +9,6 @@ import {
   Paper,
   Menu,
   MenuItem,
-  ListItem,
-  ListItemText,
 } from '@material-ui/core';
 import Button from '@mui/material/Button';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
@@ -21,7 +19,7 @@ import useSearchParamsState from '../../hooks/useSearchParamsState';
 import useCart from '../../hooks/useCart';
 import useStyles from './styles';
 
-const Navbar = ({ totalItems }) => {
+const Navbar = () => {
   const { auth } = useAuth();
   const classes = useStyles();
   const location = useLocation();
@@ -102,16 +100,20 @@ const Navbar = ({ totalItems }) => {
                     backgroundColor: 'black',
                     borderColor: 'white',
                     fontWeight: 'bold',
-                    maxWidth: 150,
+                    width: 160,
                   }}
                   onClick={handleClickOptions}
                 >
-                  <Typography variant='h6' style={{ fontSize: 16 }}>
-                    {cart.order_type === 'pick up' ? 'Pick up' : 'Deliver to'}
+                  <Typography variant='h6' style={{ fontSize: 14 }}>
+                    {cart.order_type === 'pick up'
+                      ? 'Order pick up'
+                      : 'Order delivery'}
                   </Typography>
-                  <Typography noWrap variant='body2' style={{ fontSize: 10 }}>
-                    @ 13500 W Airport Blvd
-                  </Typography>
+                  {cart.order_type === 'pick up' && (
+                    <Typography noWrap variant='body2' style={{ fontSize: 10 }}>
+                      @ 13500 W Airport Blvd
+                    </Typography>
+                  )}
                 </Button>
                 <Menu
                   getContentAnchorEl={null}

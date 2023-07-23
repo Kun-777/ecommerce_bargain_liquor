@@ -13,4 +13,11 @@ export default makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  message: {
+    color: 'rgb(105, 115, 134)',
+    fontSize: '16px',
+    lineHeight: '20px',
+    paddingTop: '12px',
+    textAlign: 'center',
+  },
 }));
