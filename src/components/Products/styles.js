@@ -7,4 +7,9 @@ export default makeStyles((theme) => ({
   content: {
     marginTop: theme.spacing(3),
   },
+  pagination: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(2),
+  },
 }));

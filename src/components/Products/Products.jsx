@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography } from '@material-ui/core';
+import Pagination from '@mui/material/Pagination';
 import Product from '../Product/Product';
 import { priceRanges } from '../Pricefilter/Pricefilter';
 import useStyles from './styles';
@@ -8,10 +9,12 @@ import axios from '../../api/axios';
 import isRelatedToSearch from '../../utils/isRelatedToSearch';
 
 const Products = () => {
+  const classes = useStyles();
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useSearchParams();
   const [filtered, setFilter] = useState(products);
-  const classes = useStyles();
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
 
   useEffect(() => {
     if (
@@ -25,8 +28,15 @@ const Products = () => {
         products.filter(
           (product) =>
             (!search.get('category') ||
+              // check if category is in one of the selected categories
               search.get('category').includes(product.category)) &&
-            priceRanges[search.get('price')].apply(null, [product.price]) &&
+            // check if price is in one of the selected price ranges
+            search
+              .get('price')
+              .split('||')
+              .map((singleFilter) => priceRanges[singleFilter])
+              .map((func) => func.apply(null, [product.price]))
+              .some((res) => res === true) &&
             (!search.get('text') ||
               isRelatedToSearch(product, search.get('text')))
         )
@@ -47,11 +57,18 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filtered.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
   return (
     <>
       <Grid container justifyContent='flex-start'>
-        {filtered.length !== 0 &&
-          filtered.map((product) => (
+        {currentProducts.length !== 0 &&
+          currentProducts.map((product) => (
             <Grid
               item
               key={product.id}
@@ -70,6 +87,15 @@ const Products = () => {
           </Typography>
         )}
       </Grid>
+      {filtered.length > productsPerPage && (
+        <Pagination
+          count={Math.ceil(filtered.length / productsPerPage)}
+          page={currentPage}
+          variant='outlined'
+          onChange={(e, page) => setCurrentPage(page)}
+          className={classes.pagination}
+        />
+      )}
     </>
   );
 };

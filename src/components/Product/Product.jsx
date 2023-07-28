@@ -20,7 +20,7 @@ const Product = ({ product }) => {
     <Card variant='outlined' className={classes.root}>
       <CardMedia
         className={classes.media}
-        image={product.image}
+        image={`../../images/${product.image}`}
         title={product.name}
       />
       <CardContent>
