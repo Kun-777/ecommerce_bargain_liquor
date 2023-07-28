@@ -37,9 +37,12 @@ const Products = () => {
   useEffect(() => {
     // Initial fetch from database
     const fetchProducts = async () => {
-      await axios.get('/products/all').then((response) => {
-        setProducts(response.data);
-      });
+      await axios
+        .get('/products/all')
+        .then((response) => {
+          setProducts(response.data);
+        })
+        .catch((e) => console.log(e));
     };
     fetchProducts();
   }, []);

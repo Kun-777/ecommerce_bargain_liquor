@@ -1,18 +1,24 @@
-import { axiosPrivate } from '../api/axios';
+import axios from '../api/axios';
 import useAuth from './useAuth';
 
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
   const refresh = async () => {
-    const response = await axiosPrivate.post('/user/refresh');
-    setAuth((prev) => ({
-      ...prev,
-      access_token: response.data.access_token,
-      first_name: response.data.first_name,
-      is_admin: response.data.is_admin,
-    }));
-    return response.data.access_token;
+    const response = await axios.post('/user/refresh', {
+      withCredentials: true,
+    });
+    if (response.data.access_token) {
+      setAuth((prev) => ({
+        ...prev,
+        access_token: response.data.access_token,
+        first_name: response.data.first_name,
+        is_admin: response.data.is_admin,
+      }));
+      return response.data.access_token;
+    } else {
+      return null;
+    }
   };
   return refresh;
 };

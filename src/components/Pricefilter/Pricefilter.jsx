@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -44,7 +44,11 @@ const Pricefilter = () => {
         .slice(0, 6)
         .map((priceRange, index) => {
           return (
-            <ListItem disablePadding className={classes.listitem}>
+            <ListItem
+              key={priceRange}
+              disablePadding
+              className={classes.listitem}
+            >
               <ListItemIcon className={classes.checkbox}>
                 <Checkbox
                   edge='start'

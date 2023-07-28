@@ -45,24 +45,24 @@ const useCartSync = (key, initialState) => {
     const fetchCart = async () => {
       if (auth.access_token) {
         // Use the value stored in the database
-        const response = await axiosPrivate
+        await axiosPrivate
           .get('/cart')
+          .then((response) => {
+            let total_items = 0;
+            let subtotal = 0;
+            for (const item of response.data) {
+              total_items += item.quantity;
+              subtotal += item.quantity * item.price;
+            }
+            setState({
+              items: response.data,
+              total_items: total_items,
+              subtotal: subtotal,
+              modified: false,
+              order_type: 'pick up',
+            });
+          })
           .catch((err) => console.log(err));
-        if (response.data) {
-          let total_items = 0;
-          let subtotal = 0;
-          for (const item of response.data) {
-            total_items += item.quantity;
-            subtotal += item.quantity * item.price;
-          }
-          setState({
-            items: response.data,
-            total_items: total_items,
-            subtotal: subtotal,
-            modified: false,
-            order_type: 'pick up',
-          });
-        }
       }
     };
     fetchCart();
