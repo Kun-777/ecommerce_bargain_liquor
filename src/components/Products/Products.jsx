@@ -11,7 +11,7 @@ import isRelatedToSearch from '../../utils/isRelatedToSearch';
 const Products = () => {
   const classes = useStyles();
   const [products, setProducts] = useState([]);
-  const [search, setSearch] = useSearchParams();
+  const [search] = useSearchParams();
   const [filtered, setFilter] = useState(products);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
