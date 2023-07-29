@@ -5,7 +5,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { EditProfile, ChangePassword, ChangeAddress } from '../../components';
+import {
+  EditProfile,
+  ChangePassword,
+  ChangeAddress,
+  UserOrders,
+} from '../../components';
 import useStyles from './styles';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
@@ -75,9 +80,7 @@ const Profile = () => {
           <div className={classes.content}>
             {selectedTab === 0 && <EditProfile />}
             {selectedTab === 1 && <ChangePassword />}
-            {selectedTab === 2 && (
-              <Typography>Content for Order History</Typography>
-            )}
+            {selectedTab === 2 && <UserOrders />}
             {selectedTab === 3 && <ChangeAddress />}
           </div>
         </Grid>

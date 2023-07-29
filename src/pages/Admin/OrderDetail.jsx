@@ -125,6 +125,10 @@ const OrderDetail = () => {
             <ListItemText primary='Phone' />
             <Typography variant='body2'>{order.phone}</Typography>
           </ListItem>
+          <ListItem style={{ padding: '3px 0' }}>
+            <ListItemText primary='Reference ID' />
+            <Typography variant='body2'>{order.reference_id}</Typography>
+          </ListItem>
           {order.order_type === 'delivery' && (
             <ListItem style={{ padding: '3px 0' }}>
               <ListItemText primary='Address' />

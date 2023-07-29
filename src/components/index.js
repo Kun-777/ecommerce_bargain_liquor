@@ -10,3 +10,4 @@ export { default as CartItem } from './CartItem/CartItem';
 export { default as ChangeAddress } from './ChangeAddress/ChangeAddress';
 export { default as DateTimePicker } from './DateTimePicker';
 export { default as TipSelection } from './TipSelection';
+export { default as UserOrders } from './UserOrders/UserOrders';

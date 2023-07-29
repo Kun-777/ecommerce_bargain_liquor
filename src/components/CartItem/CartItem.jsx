@@ -23,7 +23,7 @@ const CartItem = ({ item }) => {
             <img
               className={classes.image}
               alt={classes.name}
-              src={classes.image}
+              src={`../../images/${item.image}`}
             />
           </Box>
           <Box ml={2}>
