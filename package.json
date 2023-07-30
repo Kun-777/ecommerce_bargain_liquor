@@ -18,7 +18,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@unicef/material-ui-currency-textfield": "^0.8.6",
-    "axios": "^1.4.0",
+    "axios": "^0.21.4",
     "bootstrap": "^5.3.0",
     "date-fns": "^2.30.0",
     "localforage": "^1.10.0",

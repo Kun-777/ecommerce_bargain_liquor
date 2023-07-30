@@ -8,5 +8,7 @@ export default axios.create({
 export const axiosPrivate = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
+  xsrfCookieName: 'csrf_access_token',
+  xsrfHeaderName: 'X-CSRF-TOKEN',
   withCredentials: true,
 });

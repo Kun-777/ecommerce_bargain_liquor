@@ -7,6 +7,8 @@ const useRefreshToken = () => {
   const refresh = async () => {
     const response = await axios('/user/refresh', {
       method: 'post',
+      xsrfCookieName: 'csrf_refresh_token',
+      xsrfHeaderName: 'X-CSRF-TOKEN',
       withCredentials: true,
     });
     if (response.data.access_token) {
