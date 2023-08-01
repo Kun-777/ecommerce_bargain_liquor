@@ -31,12 +31,13 @@ const Products = () => {
               // check if category is in one of the selected categories
               search.get('category').includes(product.category)) &&
             // check if price is in one of the selected price ranges
-            search
-              .get('price')
-              .split('||')
-              .map((singleFilter) => priceRanges[singleFilter])
-              .map((func) => func.apply(null, [product.price]))
-              .some((res) => res === true) &&
+            (!search.get('price') ||
+              search
+                .get('price')
+                .split('||')
+                .map((singleFilter) => priceRanges[singleFilter])
+                .map((func) => func.apply(null, [product.price]))
+                .some((res) => res === true)) &&
             (!search.get('text') ||
               isRelatedToSearch(product, search.get('text')))
         )
@@ -51,7 +52,7 @@ const Products = () => {
         .get('/products/all')
         .then((response) => {
           setProducts(
-            response.data.sort((a, b) => b.popularity - a.popularity)
+            response.data?.sort((a, b) => b.popularity - a.popularity)
           );
         })
         .catch((e) => console.log(e));
