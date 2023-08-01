@@ -1,5 +1,11 @@
 import React from 'react';
-import { Navbar, RequireAuth, VerifyEmail, PersistLogin } from './components';
+import {
+  Navbar,
+  RequireAuth,
+  VerifyEmail,
+  PersistLogin,
+  Footer,
+} from './components';
 import {
   Home,
   Login,
@@ -52,6 +58,7 @@ const NavLayout = () => (
   <>
     <Navbar />
     <Outlet />
+    <Footer />
   </>
 );
 
@@ -59,7 +66,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <div style={{ display: 'flex' }}>
+        <div>
           <CssBaseline />
           <Routes>
             <Route element={<PersistLogin />}>

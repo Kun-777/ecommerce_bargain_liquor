@@ -25,7 +25,10 @@ const Checkout = () => {
         <Paper className={classes.paper}>
           <>
             <div>
-              <Typography variant='h5'>Thank you for your purchase.</Typography>
+              <Typography variant='h5'>
+                Thank you for your purchase. Your receipt will be sent to your
+                email very soon.
+              </Typography>
             </div>
             <br />
             <Button component={Link} to='/' variant='outlined' type='button'>

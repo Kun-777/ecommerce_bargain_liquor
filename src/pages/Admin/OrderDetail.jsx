@@ -194,13 +194,15 @@ const OrderDetail = () => {
           </ListItem>
         </List>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={() => setOpenCancel(true)}
-          >
-            Cancel
-          </Button>
+          {order.status === 'confirmed' && (
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={() => setOpenCancel(true)}
+            >
+              Cancel
+            </Button>
+          )}
           <Dialog
             open={openCancel}
             onClose={() => setOpenCancel(false)}

@@ -99,7 +99,10 @@ const UserOrderDetail = ({ order }) => {
           order.items.map((item) => (
             <ListItem style={{ padding: '10px 0' }} key={item.name}>
               <ListItemAvatar>
-                <Avatar variant='square' src={`../../images/${item.image}`} />
+                <Avatar
+                  variant='square'
+                  src={`${process.env.REACT_APP_API_BASEURL}/products/image/${item.id}`}
+                />
               </ListItemAvatar>
               <ListItemText
                 primary={item.product.name}

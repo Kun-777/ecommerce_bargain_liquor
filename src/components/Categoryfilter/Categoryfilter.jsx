@@ -31,7 +31,15 @@ const Categoryfilter = () => {
   return (
     <List
       subheader={
-        <ListSubheader sx={{ fontSize: 20, fontWeight: 'bold' }}>
+        <ListSubheader
+          sx={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           Category
         </ListSubheader>
       }
@@ -48,7 +56,16 @@ const Categoryfilter = () => {
                 name={category}
               />
             </ListItemIcon>
-            <ListItemText primary={`${category}`} />
+            <ListItemText
+              primary={`${category}`}
+              primaryTypographyProps={{
+                style: {
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                },
+              }}
+            />
           </ListItem>
         );
       })}

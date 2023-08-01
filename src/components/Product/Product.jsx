@@ -20,7 +20,7 @@ const Product = ({ product }) => {
     <Card variant='outlined' className={classes.root}>
       <CardMedia
         className={classes.media}
-        image={`../../images/${product.image}`}
+        image={`${process.env.REACT_APP_API_BASEURL}/products/image/${product.id}`}
         title={product.name}
       />
       <CardContent>
@@ -44,7 +44,7 @@ const Product = ({ product }) => {
         </div>
         <div className={classes.cardContent}>
           <Typography variant='h5' className={classes.price}>
-            {product.price}
+            {parseFloat(product.price).toFixed(2)}
           </Typography>
         </div>
         {/* <Typography

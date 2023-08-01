@@ -23,7 +23,7 @@ const CartItem = ({ item }) => {
             <img
               className={classes.image}
               alt={classes.name}
-              src={`../../images/${item.image}`}
+              src={`${process.env.REACT_APP_API_BASEURL}/products/image/${item.id}`}
             />
           </Box>
           <Box ml={2}>

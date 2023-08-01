@@ -50,7 +50,9 @@ const Products = () => {
       await axios
         .get('/products/all')
         .then((response) => {
-          setProducts(response.data);
+          setProducts(
+            response.data.sort((a, b) => b.popularity - a.popularity)
+          );
         })
         .catch((e) => console.log(e));
     };

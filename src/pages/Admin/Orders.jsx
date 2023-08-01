@@ -7,6 +7,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'reference_id', headerName: 'Reference ID', width: 120 },
   {
     field: 'order_type',
     headerName: 'Type',
@@ -93,6 +94,7 @@ export default function Orders() {
           rows={rows}
           columns={columns}
           pageSize={10}
+          rowsPerPageOptions={[10]}
           disableSelectionOnClick
           sortModel={[
             {

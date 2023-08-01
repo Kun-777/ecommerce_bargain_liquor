@@ -35,7 +35,16 @@ const Pricefilter = () => {
   return (
     <List
       subheader={
-        <ListSubheader sx={{ fontSize: 20, fontWeight: 'bold', mt: 2 }}>
+        <ListSubheader
+          sx={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            mt: 2,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
           Price Range
         </ListSubheader>
       }
@@ -57,7 +66,16 @@ const Pricefilter = () => {
                   name={priceRange}
                 />
               </ListItemIcon>
-              <ListItemText primary={`${priceRangesText[index]}`} />
+              <ListItemText
+                primary={`${priceRangesText[index]}`}
+                primaryTypographyProps={{
+                  style: {
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  },
+                }}
+              />
             </ListItem>
           );
         })}

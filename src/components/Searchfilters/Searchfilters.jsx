@@ -1,16 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Paper } from '@material-ui/core';
 import useStyles from './styles';
 import Categoryfilter from '../Categoryfilter/Categoryfilter';
-import Pricefilter from '../Pricefilter/Pricefilter'
+import Pricefilter from '../Pricefilter/Pricefilter';
 
 const Searchfilters = () => {
   const classes = useStyles();
 
   return (
-    <Paper className={classes.sidebar}>
-      <Categoryfilter/>
-      <Pricefilter/>
+    <Paper className={classes.sidebar} elevation={3}>
+      <Categoryfilter />
+      <Pricefilter />
     </Paper>
   );
 };

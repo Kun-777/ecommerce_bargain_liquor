@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',
-    width: '15%',
+    width: '12%',
     marginTop: 70,
   },
   appBarSpacer: theme.mixins.toolbar,
@@ -37,9 +37,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
   },
 }));
 

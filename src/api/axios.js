@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = `https://${process.env.REACT_APP_API_HOSTNAME}`;
+const BASE_URL = `${process.env.REACT_APP_API_BASEURL}`;
 
 export default axios.create({
   baseURL: BASE_URL,

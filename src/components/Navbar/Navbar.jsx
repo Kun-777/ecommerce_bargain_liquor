@@ -23,7 +23,7 @@ const Navbar = () => {
   const { auth } = useAuth();
   const classes = useStyles();
   const location = useLocation();
-  const [search, setSearch] = useSearchParamsState('text', null);
+  const [, setSearch] = useSearchParamsState('text', null);
   const [searchTemp, setSearchTemp] = useState('');
   const { cart, setCart } = useCart();
   const [anchorEl, setAnchorEl] = useState(null);
