@@ -33,9 +33,12 @@ const Product = ({ product }) => {
           </Typography> */}
         </div>
         <div className={classes.cardContent}>
-          <Typography variant='h6' className={classes.size}>
-            {product.size}
-          </Typography>
+          {product.size && (
+            <Typography variant='h6' className={classes.size}>
+              {product.size}
+            </Typography>
+          )}
+
           {!product.inventory && (
             <Typography variant='h6' className={classes.outofstock}>
               Out of stock

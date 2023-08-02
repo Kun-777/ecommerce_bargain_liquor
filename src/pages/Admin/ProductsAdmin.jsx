@@ -55,13 +55,13 @@ export default function ProductsAdmin() {
     {
       field: 'category',
       headerName: 'Category',
-      width: 140,
+      width: 120,
       editable: true,
     },
     {
       field: 'subcategory',
       headerName: 'Subcategory',
-      width: 170,
+      width: 140,
       editable: true,
     },
     {
@@ -74,28 +74,28 @@ export default function ProductsAdmin() {
       field: 'cost',
       headerName: 'Cost',
       type: 'number',
-      width: 120,
+      width: 100,
       editable: true,
     },
     {
       field: 'price',
       headerName: 'Price',
       type: 'number',
-      width: 120,
+      width: 100,
       editable: true,
     },
     {
       field: 'inventory',
       headerName: 'Inventory',
       type: 'number',
-      width: 140,
+      width: 100,
       editable: true,
     },
     {
       field: 'popularity',
       headerName: 'Popularity',
       type: 'number',
-      width: 150,
+      width: 100,
       editable: true,
     },
     {
@@ -285,9 +285,8 @@ export default function ProductsAdmin() {
         <DataGrid
           rows={rows}
           columns={columns}
-          components={{
-            Toolbar: GridToolbar,
-          }}
+          disableColumnSelector
+          disableDensitySelector
           pageSize={10}
           rowsPerPageOptions={[10]}
           onCellEditCommit={handleCellEditCommit}
@@ -297,6 +296,13 @@ export default function ProductsAdmin() {
               sort: 'desc',
             },
           ]}
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 500, variant: 'outlined' },
+            },
+          }}
         />
       </div>
       {message && <div className={classes.message}>{message}</div>}
@@ -364,9 +370,7 @@ export default function ProductsAdmin() {
               <Grid item xs={6}>
                 <TextField
                   variant='outlined'
-                  required
                   fullWidth
-                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   label='SKU'
                   value={newItem.sku ? newItem.sku : ''}
                   onChange={(e) =>
@@ -404,7 +408,6 @@ export default function ProductsAdmin() {
               <Grid item xs={6}>
                 <TextField
                   variant='outlined'
-                  required
                   fullWidth
                   type='number'
                   label='Cost'
@@ -446,7 +449,6 @@ export default function ProductsAdmin() {
               <Grid item xs={6}>
                 <TextField
                   variant='outlined'
-                  required
                   fullWidth
                   inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   label='Popularity'
@@ -463,6 +465,7 @@ export default function ProductsAdmin() {
                 <FormControl fullWidth variant='outlined'>
                   <InputLabel>Category</InputLabel>
                   <Select
+                    required
                     value={newItem.category ? newItem.category : ''}
                     label='Category'
                     onChange={(e) =>
@@ -472,10 +475,13 @@ export default function ProductsAdmin() {
                       }))
                     }
                   >
-                    <MenuItem value={'Beer'}>Beer</MenuItem>
+                    <MenuItem value={'Beer & Seltzers'}>
+                      Beer & Seltzers
+                    </MenuItem>
                     <MenuItem value={'Spirits'}>Spirits</MenuItem>
                     <MenuItem value={'Wine'}>Wine</MenuItem>
                     <MenuItem value={'Non-alcoholic'}>Non-alcoholic</MenuItem>
+                    <MenuItem value={'Other'}>Other</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
