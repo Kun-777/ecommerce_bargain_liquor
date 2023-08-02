@@ -93,15 +93,17 @@ export default function Orders() {
         <DataGrid
           rows={rows}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          disableSelectionOnClick
-          sortModel={[
-            {
-              field: 'id',
-              sort: 'desc',
+          disableRowSelectionOnClick
+          initialState={{
+            sorting: {
+              sortModel: [
+                {
+                  field: 'id',
+                  sort: 'desc',
+                },
+              ],
             },
-          ]}
+          }}
           onCellClick={(params, event) => {
             event.defaultMuiPrevented = true;
             navigate(`/order/${params.id}`);

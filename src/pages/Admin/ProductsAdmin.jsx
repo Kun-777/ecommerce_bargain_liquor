@@ -15,6 +15,8 @@ import {
   InputLabel,
   CircularProgress,
 } from '@material-ui/core';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -35,6 +37,47 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
   },
 }));
+
+// data validation for row update
+const useFakeMutation = () => {
+  return React.useCallback(
+    (item) =>
+      new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (item.name?.trim() === '') {
+            reject(
+              new Error("Error while saving product: name can't be empty.")
+            );
+          } else if (item.category?.trim() === '') {
+            reject(
+              new Error("Error while saving product: category can't be empty.")
+            );
+          } else if (item.price === null) {
+            reject(
+              new Error("Error while saving product: price can't be empty.")
+            );
+          } else if (item.cost === null) {
+            reject(
+              new Error("Error while saving product: cost can't be empty.")
+            );
+          } else if (item.inventory === null) {
+            reject(
+              new Error("Error while saving product: inventory can't be empty.")
+            );
+          } else if (item.popularity === null) {
+            reject(
+              new Error(
+                "Error while saving product: popularity can't be empty."
+              )
+            );
+          } else {
+            resolve({ ...item });
+          }
+        }, 200);
+      }),
+    []
+  );
+};
 
 export default function ProductsAdmin() {
   const columns = [
@@ -57,12 +100,61 @@ export default function ProductsAdmin() {
       headerName: 'Category',
       width: 120,
       editable: true,
+      type: 'singleSelect',
+      valueOptions: [
+        'Spirits',
+        'Wine',
+        'Beer & Seltzers',
+        'Non-alcoholic',
+        'Other',
+      ],
     },
     {
       field: 'subcategory',
       headerName: 'Subcategory',
       width: 140,
       editable: true,
+      type: 'singleSelect',
+      valueOptions: ({ row }) => {
+        if (row.category === 'Spirits') {
+          return [
+            'Cognac',
+            'Scotch',
+            'Bourbon',
+            'Gin',
+            'Japanese Whiskey',
+            'Canadian Whiskey',
+            'Tequila',
+            'Rum',
+            'Brandy',
+            'Vodka',
+            'Sake',
+            'Liqueurs',
+            'Cocktails',
+            'Other',
+          ];
+        } else if (row.category === 'Beer & Seltzers') {
+          return ['Domestic Beer', 'Import Beer', 'Hard Seltzers', 'Other'];
+        } else if (row.category === 'Wine') {
+          return [
+            'Cabernet Sauvignon',
+            'Pinot Noir',
+            'Malbec',
+            'Merlot',
+            'Zinfandel',
+            'Moscato',
+            'Chardonnay',
+            'Sauvignon Blanc',
+            'Pinot Grigio',
+            'Riesling',
+            'Champagne',
+            'Sparkling Wine',
+            'Blush Rose',
+            'Other',
+          ];
+        }
+        return ['Other'];
+      },
     },
     {
       field: 'description',
@@ -159,8 +251,9 @@ export default function ProductsAdmin() {
 
   const classes = useStyles();
   const axiosPrivate = useAxiosPrivate();
+  const mutateRow = useFakeMutation();
   const [rows, setRows] = useState([]);
-  const [message, setMessage] = useState(null);
+  const [snackbar, setSnackbar] = useState(null);
   // control dialogs open/close
   const [openDelete, setOpenDelete] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
@@ -180,35 +273,56 @@ export default function ProductsAdmin() {
       .then((response) => {
         setRows(response.data);
       })
-      .catch((e) => setMessage(e.response.data.detail));
+      .catch((e) =>
+        setSnackbar({ children: e.response.data.detail, severity: 'error' })
+      );
   }, [axiosPrivate]);
 
-  const handleCellEditCommit = useCallback(
-    async ({ id, field, value }) => {
-      let fieldToUpdate = {};
-      fieldToUpdate[field] = value;
+  const handleRowUpdateCommit = useCallback(
+    async (newRow) => {
+      const response = await mutateRow(newRow);
       await axiosPrivate
-        .put(`/products/${id}`, fieldToUpdate)
+        .put(`/products/${newRow.id}`, newRow)
         .then((response) => {
-          setMessage(response.data.msg);
+          setSnackbar({
+            children: response.data.msg,
+            severity: 'success',
+          });
         })
-        .catch((e) => setMessage(e.response.data.detail));
+        .catch((e) => {
+          setSnackbar({ children: e.response.data.detail, severity: 'error' });
+        });
+      return response;
     },
-    [axiosPrivate]
+    [axiosPrivate, mutateRow]
   );
+
+  const handleProcessRowUpdateError = useCallback((error) => {
+    setSnackbar({ children: error.message, severity: 'error' });
+  }, []);
 
   const handleCellDelete = async () => {
     await axiosPrivate
       .delete(`/products/${idDelete}`)
-      .then((response) => setMessage('Successfully deleted item'))
-      .catch((e) => setMessage(e.response.data.detail));
+      .then((response) =>
+        setSnackbar({
+          children: 'Successfully deleted item',
+          severity: 'success',
+        })
+      )
+      .catch((e) =>
+        setSnackbar({ children: e.response.data.detail, severity: 'error' })
+      );
   };
 
   const handleCellAdd = async () => {
     await axiosPrivate
       .post('/products', newItem)
       .then(async (response) => {
-        setMessage(response.data.msg);
+        setSnackbar({
+          children: response.data.msg,
+          severity: 'success',
+        });
         if (uploadFile) {
           let fd = new FormData();
           fd.append('file', uploadFile);
@@ -219,15 +333,23 @@ export default function ProductsAdmin() {
               },
             })
             .then((response) => {
-              setMessage((prev) => `${prev}; ${response.data.msg}`);
+              setSnackbar({
+                children: response.data.msg,
+                severity: 'success',
+              });
             })
             .catch((e) =>
-              setMessage((prev) => `${prev}; ${e.response.data.detail}`)
+              setSnackbar({
+                children: e.response.data.detail,
+                severity: 'error',
+              })
             );
           setUploadFile(null);
         }
       })
-      .catch((e) => setMessage(e.response.data.detail));
+      .catch((e) =>
+        setSnackbar({ children: e.response.data.detail, severity: 'error' })
+      );
     setNewItem({});
   };
 
@@ -235,7 +357,10 @@ export default function ProductsAdmin() {
     await axiosPrivate
       .put(`/products/${idUploadImg}`, { image: uploadFile.name })
       .then(async (response) => {
-        setMessage(response.data.msg);
+        setSnackbar({
+          children: response.data.msg,
+          severity: 'success',
+        });
         let fd = new FormData();
         fd.append('file', uploadFile);
         await axiosPrivate
@@ -245,14 +370,19 @@ export default function ProductsAdmin() {
             },
           })
           .then((response) => {
-            setMessage((prev) => `${prev}; ${response.data.msg}`);
+            setSnackbar({
+              children: response.data.msg,
+              severity: 'success',
+            });
           })
           .catch((e) =>
-            setMessage((prev) => `${prev}; ${e.response.data.detail}`)
+            setSnackbar({ children: e.response.data.detail, severity: 'error' })
           );
         setUploadFile(null);
       })
-      .catch((e) => setMessage(e.response.data.detail));
+      .catch((e) =>
+        setSnackbar({ children: e.response.data.detail, severity: 'error' })
+      );
   };
 
   const handleFileUpload = (e) => {
@@ -287,15 +417,18 @@ export default function ProductsAdmin() {
           columns={columns}
           disableColumnSelector
           disableDensitySelector
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          onCellEditCommit={handleCellEditCommit}
-          sortModel={[
-            {
-              field: 'id',
-              sort: 'desc',
+          processRowUpdate={handleRowUpdateCommit}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
+          initialState={{
+            sorting: {
+              sortModel: [
+                {
+                  field: 'id',
+                  sort: 'desc',
+                },
+              ],
             },
-          ]}
+          }}
           slots={{ toolbar: GridToolbar }}
           slotProps={{
             toolbar: {
@@ -305,7 +438,16 @@ export default function ProductsAdmin() {
           }}
         />
       </div>
-      {message && <div className={classes.message}>{message}</div>}
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => setSnackbar(null)}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={() => setSnackbar(null)} />
+        </Snackbar>
+      )}
       <Dialog
         open={openDelete}
         onClose={() => setOpenDelete(false)}
