@@ -10,6 +10,8 @@ export default makeStyles(() => ({
   media: {
     height: 0,
     paddingTop: '90%',
+    padding: '1em 1em 0 1em',
+    objectFit: 'contain',
   },
   cardActions: {
     marginTop: '-2rem',

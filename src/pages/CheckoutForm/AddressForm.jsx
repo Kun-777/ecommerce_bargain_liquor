@@ -28,7 +28,8 @@ const AddressForm = ({ next, order_type, userInfo }) => {
   return (
     <>
       <Typography variant='h6' gutterBottom>
-        Select Delivery Time
+        {order_type === 'delivery' && 'Select Delivery Time'}
+        {order_type === 'pick up' && 'Select Pick Up Time'}
       </Typography>
       <div className={classes.form}>
         <DateTimePicker setScheduledDatetime={setScheduledDatetime} />

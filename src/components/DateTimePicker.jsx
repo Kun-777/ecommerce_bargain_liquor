@@ -77,10 +77,10 @@ const DateTimePicker = ({ setScheduledDatetime }) => {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>Delivery Time</Typography>
+          <Typography className={classes.heading}>Selected Time</Typography>
           <Typography className={classes.secondaryHeading}>
             {modified
-              ? `Deliver at ${
+              ? `${
                   tempDate.getMonth() + 1
                 }/${tempDate.getDate()}/${tempDate.getFullYear()} 
               ${tempTime.getHours().toString().padStart(2, '0')}:${tempTime

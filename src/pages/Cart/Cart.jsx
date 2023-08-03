@@ -137,6 +137,11 @@ const Cart = () => {
           </Grid>
         </Grid>
       </Box>
+      {cart.subtotal < 10 && (
+        <Typography className={classes.error} align='right'>
+          Sorry, your order amount does not meet our order minimum: $9.99
+        </Typography>
+      )}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button
           className={classes.emptyButton}
@@ -164,6 +169,7 @@ const Cart = () => {
           type='button'
           variant='contained'
           color='primary'
+          disabled={cart.subtotal < 10}
         >
           Checkout
         </Button>

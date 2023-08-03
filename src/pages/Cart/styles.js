@@ -86,4 +86,7 @@ export default makeStyles((theme) => ({
     },
     marginTop: '2rem',
   },
+  error: {
+    color: 'red',
+  },
 }));
